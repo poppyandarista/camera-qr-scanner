@@ -1,70 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Barcode Scanner with Photo</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QR Code Scanner</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:ital,wght@0,400;1,400&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        #camera {
-            width: 150%;
-            max-width: 550px;
-            margin: 0 auto;
-            margin-top: 90px;
-            display: block;
-            position: relative;
-            box-shadow: 20px rgba(0, 0, 0, 0.5);
-        }
-        #countdownContainer {
-            display: none;
-            position: absolute;
-            top: 40%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: rgb(0, 0, 0);
-            z-index: 1000;
-        }
-        #countdownText {
-            font-size: 2.3rem;
-        }
-        #countdown {
-            font-size: 4rem;
-        }
-        #photoContainer {
-            display: none;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            text-align: center;
-        }
-        #photo {
-            max-width: 100%;
-            height: auto;
-            margin-bottom: 10px;
-        }
-        #nextButton {
-            padding: 10px 20px;
-            font-size: 1em;
-            cursor: pointer;
-        }
+      body {
+        font-family: "Poppins", sans-serif;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(135deg, #ceddc2, #fbfddd);
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      h1 {
+        font-family: "Playfair Display", serif;
+        font-weight: 700;
+        color: #000;
+        margin-bottom: 10px;
+        margin-top: -10px;
+      }
+      #instructions {
+        margin-top: 10px;
+        font-size: 1.2em;
+        color: #000;
+        font-weight: 400;
+        font-style: italic;
+      }
+      #camera {
+        width: 80%;
+        max-width: 700px;
+        margin: 20px auto;
+        display: block;
+        border: 5px solid #ccc;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transform: scaleX(-1);
+      }
+      #countdownContainer {
+        display: none;
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #000;
+        z-index: 1000;
+      }
+      #countdownText {
+        font-size: 2.3rem;
+        color: rgba(255, 255, 255, 0.8); /* Warna abu-abu semi putih */
+      }
+
+      #countdown {
+        font-size: 4rem;
+        color: rgba(255, 255, 255, 0.8); /* Warna abu-abu semi putih */
+      }
+
+      #photoContainer {
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        text-align: center;
+        width: 80%;
+        max-width: 700px;
+      }
+      #photo {
+        max-width: 100%;
+        height: auto;
+        margin-bottom: 20px;
+        transform: scaleX(-1); /* Menghilangkan efek mirror pada foto */
+      }
+      #photoMessage {
+        font-size: 1.2em;
+        color: #000;
+        margin-bottom: 20px;
+      }
+      #nextButton {
+        padding: 10px 20px;
+        font-size: 1em;
+        cursor: pointer;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        display: block;
+        margin: 0 auto;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
+    <h1>Scan Kode QR</h1>
+    <div id="instructions">Posisikan kode QR di dalam kamera</div>
     <video id="camera" autoplay></video>
     <div id="countdownContainer">
-        <b><div id="countdownText">Memulai hitungan mundur...</div>
-        <div id="countdown"></div></b>
+      <b
+        ><div id="countdownText">Memulai hitungan mundur...</div>
+        <div id="countdown"></div
+      ></b>
     </div>
     <div id="photoContainer">
-        <img id="photo" alt="Captured Photo">
-        <button id="nextButton">Next</button>
+      <img id="photo" alt="Captured Photo" />
+      <div id="photoMessage">Scan QR dan foto bukti berhasil disimpan!</div>
+      <button id="nextButton">Selesai</button>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
