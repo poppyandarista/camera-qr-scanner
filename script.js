@@ -1,4 +1,3 @@
-// script.js
 const video = document.getElementById('camera');
 const photoElement = document.getElementById('photo');
 const photoContainer = document.getElementById('photoContainer');
@@ -28,74 +27,65 @@ function tick() {
         });
 
         if (code) {
-            console.log("Data QR code:", code.data); // Debug: Tampilkan data QR code di console
+            console.log("Data QR code:", code.data);
 
-            // Mulai hitungan mundur sebelum mengambil foto
             startCountdown(code);
-            isScanning = false; // Menghentikan proses scanning
+            isScanning = false;
         }
     }
 
     if (isScanning) {
-        requestAnimationFrame(tick); // Lanjutkan loop hanya jika masih scanning
+        requestAnimationFrame(tick);
     }
 }
 
 function startCountdown(code) {
-    // Tampilkan tulisan "Memulai hitungan mundur..."
     countdownContainer.style.display = 'block';
     countdownText.textContent = 'Memulai hitungan mundur...';
     countdownElement.textContent = '';
 
-    // Tunggu 2 detik sebelum memulai hitungan mundur
     setTimeout(() => {
-        countdownText.textContent = ''; // Sembunyikan tulisan
-        let count = 5; // Hitungan mundur dari 5
-        countdownElement.textContent = count; // Tampilkan hitungan awal
+        countdownText.textContent = '';
+        let count = 5;
+        countdownElement.textContent = count;
 
         const countdownInterval = setInterval(() => {
             count--;
-            countdownElement.textContent = count; // Perbarui tampilan hitungan
+            countdownElement.textContent = count;
 
             if (count === 0) {
-                clearInterval(countdownInterval); // Hentikan hitungan mundur
-                countdownContainer.style.display = 'none'; // Sembunyikan hitungan mundur
+                clearInterval(countdownInterval);
+                countdownContainer.style.display = 'none';
 
-                // Ambil foto setelah hitungan selesai
                 takePhoto(code);
             }
-        }, 1000); // Update setiap 1 detik
-    }, 2000); // Tunggu 2 detik sebelum memulai hitungan mundur
+        }, 1000);
+    }, 2000);
 }
 
 function takePhoto(code) {
-    // Buat canvas baru untuk mengambil gambar dari video
     const canvas = document.createElement('canvas');
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     const context = canvas.getContext('2d');
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-    // Konversi canvas ke data URL (format gambar)
     const photoDataUrl = canvas.toDataURL('image/png');
-    photoElement.src = photoDataUrl; // Tampilkan foto di pop-up
+    photoElement.src = photoDataUrl;
 
-    // Tampilkan pop-up
     photoContainer.style.display = 'block';
 
-    // Parsing data dari URL Google Form
     try {
         const url = new URL(code.data);
         const searchParams = new URLSearchParams(url.search);
 
-        // Ambil data dari parameter URL
-        const kodeUnik = searchParams.get('entry.1473065138'); // Kode Unik
-        const nama = searchParams.get('entry.248739177'); // Nama
-        const kelas = searchParams.get('entry.385545390'); // Kelas
-        const noHp = searchParams.get('entry.1564877205'); // Nomor HP
+        const kodeUnik = searchParams.get('entry.2010557486');
+        const nama = searchParams.get('entry.463547000');
+        const kelas = searchParams.get('entry.1572677785');
+        const noHp = searchParams.get('entry.1134601129');
+        const keterangan = searchParams.get('entry.2134622381');
 
-        // Jika semua data ada, kirim ke Google Sheets
-        if (kodeUnik && nama && kelas && noHp) {
+        if (kodeUnik && nama && kelas && noHp && keterangan) {
             const waktuScan = new Date().toLocaleString('id-ID', {
                 day: '2-digit',
                 month: '2-digit',
@@ -103,16 +93,16 @@ function takePhoto(code) {
                 hour: '2-digit',
                 minute: '2-digit',
                 second: '2-digit'
-            }); // Format tanggal dan waktu: DD/MM/YYYY, HH:MM:SS
+            });
 
-            // Kirim data dan foto ke Google Sheets
             sendDataToGoogleSheets({
                 waktuScan: waktuScan,
-                kodeUnik: kodeUnik.toString(), // Pastikan kodeUnik adalah string
+                kodeUnik: kodeUnik.toString(),
                 nama: nama,
                 kelas: kelas,
-                noHp: noHp.toString(), // Pastikan noHp adalah string
-                photo: photoDataUrl // Kirim foto baru sebagai data URL
+                noHp: noHp.toString(),
+                keterangan: keterangan,
+                photo: photoDataUrl
             });
         }
     } catch (error) {
@@ -121,8 +111,8 @@ function takePhoto(code) {
 }
 
 function sendDataToGoogleSheets(data) {
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbyaSJKSFbMVUtZjeoSXSbKnmEKanE2kf6sg81lSj54Fuk2syyYco65w9UmQn7feoKQI/exec';
-    console.log("Data yang dikirim ke Google Sheets:", data); // Debug: Tampilkan data yang dikirim
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxEMgjKFCsQb1n1OOi8_0_BxY3M_HkDOqppazr7cZH5mTzhGjplwGKYHCDRauYDnr2yIA/exec';
+    console.log("Data yang dikirim ke Google Sheets:", data);
 
     fetch(scriptURL, {
         method: 'POST',
@@ -130,7 +120,7 @@ function sendDataToGoogleSheets(data) {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data), // Kirim data dalam bentuk JSON
+        body: JSON.stringify(data),
     })
     .then(response => response.text())
     .then(data => {
@@ -141,9 +131,8 @@ function sendDataToGoogleSheets(data) {
     });
 }
 
-// Event listener untuk tombol "Next"
 nextButton.addEventListener('click', () => {
-    location.reload(); // Refresh halaman
+    location.reload();
 });
 
 setupCamera();
