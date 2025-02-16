@@ -36,14 +36,16 @@
         font-style: italic;
       }
       #camera {
-        width: 80%;
-        max-width: 700px;
+        width: 1070px;
+        height: 540px;
+        /* height: calc((90vw / 16) * 9); */
         margin: 20px auto;
         display: block;
         border: 5px solid #ccc;
         border-radius: 10px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         transform: scaleX(-1);
+        object-fit: cover;
       }
       #countdownContainer {
         display: none;
@@ -73,19 +75,24 @@
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         z-index: 1000;
         text-align: center;
-        width: 80%;
-        max-width: 700px;
+        width: 90%;
+        max-width: 800px;
       }
       #photo {
-        max-width: 100%;
+        width: 100%;
         height: auto;
+        aspect-ratio: 16/9;
         margin-bottom: 20px;
         transform: scaleX(-1);
+        object-fit: cover;
       }
       #photoMessage {
         font-size: 1.2em;
         color: #000;
         margin-bottom: 20px;
+      }
+      #id {
+        margin-bottom: 10px;
       }
       #nextButton {
         padding: 10px 20px;
@@ -105,13 +112,14 @@
     <div id="instructions">Posisikan kode QR di dalam kamera</div>
     <video id="camera" autoplay></video>
     <div id="countdownContainer">
-      <b
-        ><div id="countdownText">Memulai hitungan mundur...</div>
-        <div id="countdown"></div
-      ></b>
+      <b>
+        <div id="countdownText">Memulai hitungan mundur...</div>
+        <div id="countdown"></div>
+      </b>
     </div>
     <div id="photoContainer">
       <img id="photo" alt="Captured Photo" />
+      <div id="nama"></div>
       <div id="photoMessage">Scan QR dan foto bukti berhasil disimpan!</div>
       <button id="nextButton">Selesai</button>
     </div>

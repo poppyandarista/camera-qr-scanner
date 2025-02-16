@@ -1,5 +1,6 @@
 const video = document.getElementById('camera');
 const photoElement = document.getElementById('photo');
+const namaElement = document.getElementById('nama')
 const photoContainer = document.getElementById('photoContainer');
 const countdownContainer = document.getElementById('countdownContainer');
 const countdownText = document.getElementById('countdownText');
@@ -79,11 +80,13 @@ function takePhoto(code) {
         const url = new URL(code.data);
         const searchParams = new URLSearchParams(url.search);
 
-        const kodeUnik = searchParams.get('entry.2010557486');
-        const nama = searchParams.get('entry.463547000');
-        const kelas = searchParams.get('entry.1572677785');
-        const noHp = searchParams.get('entry.1134601129');
-        const keterangan = searchParams.get('entry.2134622381');
+        const kodeUnik = searchParams.get('entry.1883684488');
+        const nama = searchParams.get('entry.1028027445');
+        const kelas = searchParams.get('entry.1688765742');
+        const noHp = searchParams.get('entry.797715333');
+        const keterangan = searchParams.get('entry.1393924849');
+
+        namaElement.textContent = nama;
 
         if (kodeUnik && nama && kelas && noHp && keterangan) {
             const waktuScan = new Date().toLocaleString('id-ID', {
@@ -111,7 +114,7 @@ function takePhoto(code) {
 }
 
 function sendDataToGoogleSheets(data) {
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbxEMgjKFCsQb1n1OOi8_0_BxY3M_HkDOqppazr7cZH5mTzhGjplwGKYHCDRauYDnr2yIA/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxQVY09ftv71R030Npa981Qea3Tgqr9qmOGu8ug2x1Ye8Zsrr9ptLNNGqFhqxAt4-8Qxw/exec';
     console.log("Data yang dikirim ke Google Sheets:", data);
 
     fetch(scriptURL, {
