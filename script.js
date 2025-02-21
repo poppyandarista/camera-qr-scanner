@@ -1,6 +1,6 @@
 const video = document.getElementById('camera');
 const photoElement = document.getElementById('photo');
-const namaElement = document.getElementById('nama')
+const namaElement = document.getElementById('nama');
 const photoContainer = document.getElementById('photoContainer');
 const countdownContainer = document.getElementById('countdownContainer');
 const countdownText = document.getElementById('countdownText');
@@ -74,8 +74,6 @@ function takePhoto(code) {
     const photoDataUrl = canvas.toDataURL('image/png');
     photoElement.src = photoDataUrl;
 
-    photoContainer.style.display = 'block';
-
     try {
         const url = new URL(code.data);
         const searchParams = new URLSearchParams(url.search);
@@ -86,35 +84,42 @@ function takePhoto(code) {
         const noHp = searchParams.get('entry.797715333');
         const keterangan = searchParams.get('entry.1393924849');
 
+        const penggunaanQR = localStorage.getItem(kodeUnik) || 0;
+        if (penggunaanQR >= 2) {
+            alert("QR code sudah digunakan lebih dari 2 kali. Tidak bisa digunakan lagi.");
+            resetCamera();
+            return;
+        }
+
         namaElement.textContent = nama;
 
-        if (kodeUnik && nama && kelas && noHp && keterangan) {
-            const waktuScan = new Date().toLocaleString('id-ID', {
+        sendDataToGoogleSheets({
+            waktuScan: new Date().toLocaleString('id-ID', {
                 day: '2-digit',
                 month: '2-digit',
                 year: 'numeric',
                 hour: '2-digit',
                 minute: '2-digit',
                 second: '2-digit'
-            });
+            }),
+            kodeUnik: kodeUnik.toString(),
+            nama: nama,
+            kelas: kelas,
+            noHp: noHp.toString(),
+            keterangan: keterangan,
+            photo: photoDataUrl
+        });
 
-            sendDataToGoogleSheets({
-                waktuScan: waktuScan,
-                kodeUnik: kodeUnik.toString(),
-                nama: nama,
-                kelas: kelas,
-                noHp: noHp.toString(),
-                keterangan: keterangan,
-                photo: photoDataUrl
-            });
-        }
+        localStorage.setItem(kodeUnik, parseInt(penggunaanQR) + 1);
     } catch (error) {
         console.error("Error parsing URL:", error);
     }
+
+    photoContainer.style.display = 'block';
 }
 
 function sendDataToGoogleSheets(data) {
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbxQVY09ftv71R030Npa981Qea3Tgqr9qmOGu8ug2x1Ye8Zsrr9ptLNNGqFhqxAt4-8Qxw/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxQVY09ftv71R030Npa981Qea3Tgqr9qmOGu8ug2x1Ye8Zsrr9ptLNNGqFhqxAt4-8Qxw/exec'; // Ganti dengan URL Google Apps Script Anda
     console.log("Data yang dikirim ke Google Sheets:", data);
 
     fetch(scriptURL, {
@@ -132,6 +137,12 @@ function sendDataToGoogleSheets(data) {
     .catch(error => {
         console.error('Error:', error);
     });
+}
+
+function resetCamera() {
+    isScanning = true;
+    photoContainer.style.display = 'none';
+    setupCamera();
 }
 
 nextButton.addEventListener('click', () => {
